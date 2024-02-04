@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             li.innerHTML = taskDescription;
-            listContainer.appendChild(li);
+            insertTaskInOrder(li);
 
             let span = document.createElement("span");
             span.innerHTML = "\u00d7";
@@ -33,9 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         inputBox.value = "";
         priorityInput.value = "";
         completionTimeInput.value = "";
-        saveData();
     }
-
     listContainer.addEventListener("click", function (e) {
         if (e.target.tagName === "LI") {
             e.target.classList.toggle("checked");
@@ -45,14 +43,42 @@ document.addEventListener("DOMContentLoaded", function () {
         saveData();
     }, false);
 
-    function saveData() {
-        localStorage.setItem("data", listContainer.innerHTML);
+    function insertTaskInOrder(newTask) {
+        const tasks = Array.from(listContainer.children);
+        let added = false;
+
+        for (let i = 0; i < tasks.length; i++) {
+            const priorityNew = extractPriority(newTask.innerHTML);
+            const priorityExisting = extractPriority(tasks[i].innerHTML);
+
+            if (priorityNew < priorityExisting) {
+                listContainer.insertBefore(newTask, tasks[i]);
+                added = true;
+                break;
+            } else if (priorityNew === priorityExisting) {
+                const timeNew = extractCompletionTime(newTask.innerHTML);
+                const timeExisting = extractCompletionTime(tasks[i].innerHTML);
+
+                if (timeNew < timeExisting) {
+                    listContainer.insertBefore(newTask, tasks[i]);
+                    added = true;
+                    break;
+                }
+            }
+        }
+
+        if (!added) {
+            listContainer.appendChild(newTask);
+        }
     }
 
-    function showTask() {
-        const storedData = localStorage.getItem("data");
-        if (storedData) {
-            listContainer.innerHTML = storedData;
-        }
+    function extractPriority(taskDescription) {
+        const priorityMatch = taskDescription.match(/\(Priority: (\d+)\)/);
+        return priorityMatch ? parseInt(priorityMatch[1]) : 0;
+    }
+
+    function extractCompletionTime(taskDescription) {
+        const timeMatch = taskDescription.match(/\(Completion Time: (.+?)\)/);
+        return timeMatch ? timeMatch[1] : '';
     }
 });
