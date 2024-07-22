@@ -2,7 +2,7 @@
 
 
 # Overview
-ToDo Optimizer is a simple and efficient to-do list application that helps you manage your tasks with priority and estimated completion time. It provides a clean and user-friendly interface to add, prioritize, and remove tasks.
+ToDo Optimizer is a simple and efficient to-do list application that helps you manage your tasks with priority and estimated completion time. It provides a clean and user-friendly interface to add, prioritize, and remove tasks 
 
 # Features
 Add Tasks: Enter your task details, including task description, priority (1-5), and estimated completion time.
